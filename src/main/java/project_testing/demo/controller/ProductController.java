@@ -1,6 +1,8 @@
 package project_testing.demo.controller;
 
 import java.util.*;
+import java.util.stream.Collectors;
+
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +15,25 @@ import project_testing.demo.model.ItemListResponse;
 @RequestMapping("/api/v1/products")
 public class ProductController {
     private final List<Item> items = new ArrayList<>();
+    // private final List<String> categories = new ArrayList();
+
+    @GetMapping(params =  "category")
+    public ItemListResponse readItemsByCategory(
+        @RequestParam(name = "category") String categoryName
+    ) {
+        String filterCategory = categoryName.toLowerCase();
+        
+        List<Item> filteredList = items.stream()
+            .filter(item -> item.getCategories() != null && 
+            item.getCategories().stream()
+            .map(String::toLowerCase)
+            .anyMatch(cat -> cat.equals(filterCategory)))
+            .collect(Collectors.toList());
+
+        int totalCount = filteredList.size();
+
+        return new ItemListResponse(totalCount, filteredList);
+    }
 
     @GetMapping
     public ItemListResponse readAllItems(
@@ -35,7 +56,6 @@ public class ProductController {
         List<Item> paginatedList = items.subList(startIndex, endIndex);
         int totalCount = items.size();
         return new ItemListResponse(totalCount, paginatedList);
-
     }
 
     @GetMapping("/{id}")
