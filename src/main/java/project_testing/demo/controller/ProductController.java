@@ -52,9 +52,10 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Item> updateItem(@PathVariable String id,
-                                           @RequestBody Item updatedItem) {
-
+    public ResponseEntity<Item> updateItem(
+        @PathVariable String id,
+        @RequestBody Item updatedItem
+    ) {
         return itemRepository.findById(id).map(existing -> {
             updatedItem.setId(id);
             Item saved = itemRepository.save(updatedItem);
