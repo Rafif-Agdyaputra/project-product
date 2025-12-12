@@ -8,6 +8,10 @@ import org.springframework.data.domain.*;
 
 import project_testing.demo.model.*;
 
+import io.swagger.v3.oas.annotations.*;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+@Tag(name = "Products", description = "Products CRUD API")
 @RestController
 @RequestMapping("/api/v1/products")
 public class ProductController {
@@ -18,6 +22,10 @@ public class ProductController {
         this.itemRepository = itemRepository;
     }
 
+    @Operation(
+        summary = "Get all products",
+        description = "Fetch all data products"
+    )
     @GetMapping
     public ItemListResponse readAllItems(
         @RequestParam(defaultValue = "0") int page,
