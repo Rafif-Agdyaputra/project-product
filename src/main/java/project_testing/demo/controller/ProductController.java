@@ -59,6 +59,12 @@ public class ProductController {
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
 
+    @PostMapping("/bulk")
+    public ResponseEntity<List<Item>> createBulkItems(@RequestBody List<Item> newItems) {
+        List<Item> savedItems = itemRepository.saveAll(newItems);
+        return new ResponseEntity<>(savedItems, HttpStatus.CREATED);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<Item> updateItem(
         @PathVariable String id,
